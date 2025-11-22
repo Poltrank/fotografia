@@ -39,6 +39,7 @@ export const Footer: React.FC<FooterProps> = ({ isAdmin, toggleAdmin }) => {
   const handleExportData = () => {
     const portfolio = localStorage.getItem('portfolio_items');
     const gallery = localStorage.getItem('gallery_items');
+    const logo = localStorage.getItem('logo_url');
     
     // Usa os dados do localStorage se existirem, senão usa os defaults importados
     const portfolioData = portfolio ? JSON.parse(portfolio) : PORTFOLIO_ITEMS;
@@ -61,6 +62,9 @@ export const Footer: React.FC<FooterProps> = ({ isAdmin, toggleAdmin }) => {
     }
 
     const code = `import { PortfolioItem, ContactInfo } from './types';
+
+// URL do Logotipo personalizado.
+export const CUSTOM_LOGO_URL: string | null = ${logo ? JSON.stringify(logo) : "null"};
 
 export const PORTFOLIO_ITEMS: PortfolioItem[] = ${JSON.stringify(portfolioData, null, 2)};
 

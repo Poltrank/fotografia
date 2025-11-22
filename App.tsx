@@ -7,7 +7,7 @@ import { QuoteForm } from './components/QuoteForm';
 import { TechGallery } from './components/TechGallery';
 import { WhatsAppButton } from './components/WhatsAppButton';
 
-import { PORTFOLIO_ITEMS, GALLERY_IMAGES_SEED } from './constants';
+import { PORTFOLIO_ITEMS, GALLERY_IMAGES_SEED, CUSTOM_LOGO_URL } from './constants';
 import { PortfolioItem, GalleryItem } from './types';
 
 function App() {
@@ -42,7 +42,8 @@ function App() {
 
   // Estado para o Logotipo personalizado
   const [logoUrl, setLogoUrl] = useState<string | null>(() => {
-    return localStorage.getItem('logo_url');
+    const saved = localStorage.getItem('logo_url');
+    return saved || CUSTOM_LOGO_URL;
   });
 
   // Estado de Navegação
