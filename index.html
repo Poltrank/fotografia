@@ -9,33 +9,37 @@
     <style>
       body {
         font-family: 'Montserrat', sans-serif;
+        background-color: #ffffff;
       }
       
-      /* Animação para a Galeria Tecnológica */
-      @keyframes scroll-left {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
+      /* Utilitários 3D para a Galeria */
+      .perspective-1000 {
+        perspective: 1000px;
       }
       
-      @keyframes scroll-right {
-        0% { transform: translateX(-50%); }
-        100% { transform: translateX(0); }
+      .preserve-3d {
+        transform-style: preserve-3d;
+      }
+      
+      .backface-hidden {
+        backface-visibility: hidden;
       }
 
-      .animate-scroll-left {
-        animation: scroll-left 40s linear infinite;
+      /* Efeito de Reflexo (Glass Floor) */
+      .reflect-image {
+        -webkit-box-reflect: below 0px linear-gradient(to bottom, rgba(0,0,0,0) 60%, rgba(0,0,0,0.4));
       }
 
-      .animate-scroll-right {
-        animation: scroll-right 40s linear infinite;
+      /* Animação de Flutuação Suave */
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
       }
       
-      /* Pausar animação ao passar o mouse */
-      .group:hover .animate-scroll-left,
-      .group:hover .animate-scroll-right {
-        animation-play-state: paused;
+      .animate-float {
+        animation: float 6s ease-in-out infinite;
       }
-      
+
       /* Esconder barra de rolagem */
       .hide-scrollbar::-webkit-scrollbar {
         display: none;
