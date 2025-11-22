@@ -11,7 +11,7 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
     "id": 2,
     "title": "Ensaio Pre-wedding",
     "category": "Pre-wedding",
-    "imageUrl": "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&q=80&w=1000"
+    "imageUrl": "https://i.postimg.cc/029WKw99/6389757e4f014867ab65cddfbfa8ad45.jpg"
   },
   {
     "id": 3,
