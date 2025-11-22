@@ -1,7 +1,7 @@
 import { PortfolioItem, ContactInfo } from './types';
 
 // URL do Logotipo personalizado. Se estiver null, usa o Bonsai padrão (SVG).
-export const CUSTOM_LOGO_URL: string | null = null;
+export const CUSTOM_LOGO_URL: string | null = "https://i.postimg.cc/02KTyxNV/m-(1).png";
 
 export const PORTFOLIO_ITEMS: PortfolioItem[] = [
   {
