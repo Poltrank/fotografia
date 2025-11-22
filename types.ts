@@ -5,6 +5,11 @@ export interface PortfolioItem {
   category: string;
 }
 
+export interface GalleryItem {
+  id: string;
+  url: string;
+}
+
 export interface ContactInfo {
   phone: string;
   email: string;

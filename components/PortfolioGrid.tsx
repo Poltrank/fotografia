@@ -26,13 +26,13 @@ export const PortfolioGrid: React.FC<PortfolioGridProps> = ({ items, isAdmin, on
   };
 
   return (
-    <section className="w-full bg-white pb-24 px-4 md:px-12">
+    <section className="w-full bg-white pb-12 px-4 md:px-12">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-8">
           {items.map((item) => (
             <div key={item.id} className="flex flex-col group relative">
               <div 
-                className={`overflow-hidden aspect-[4/3] w-full bg-gray-100 mb-6 relative rounded-sm ${isAdmin ? 'cursor-pointer ring-4 ring-transparent hover:ring-red-500/30' : ''}`}
+                className={`overflow-hidden aspect-[4/3] w-full bg-gray-100 mb-3 relative rounded-sm ${isAdmin ? 'cursor-pointer ring-4 ring-transparent hover:ring-red-500/30' : ''}`}
                 onClick={(e) => handleEditClick(e, item)}
                 title={isAdmin ? "Clique para editar" : item.title}
               >

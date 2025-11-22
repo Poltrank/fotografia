@@ -46,7 +46,8 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
 ];
 
 // Imagens para a Galeria Tecnológica (Mistura de alta qualidade)
-export const GALLERY_IMAGES = [
+// Usado apenas para inicializar o estado se o localStorage estiver vazio
+export const GALLERY_IMAGES_SEED = [
   "https://images.unsplash.com/photo-1511285560982-1356c11d4606?auto=format&fit=crop&q=80&w=800", // Wedding party
   "https://images.unsplash.com/photo-1519225448526-0f09f87426fc?auto=format&fit=crop&q=80&w=800", // Nature wedding
   "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&q=80&w=800", // DJ/Party

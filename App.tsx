@@ -5,12 +5,13 @@ import { PortfolioGrid } from './components/PortfolioGrid';
 import { Footer } from './components/Footer';
 import { QuoteForm } from './components/QuoteForm';
 import { TechGallery } from './components/TechGallery';
+import { WhatsAppButton } from './components/WhatsAppButton';
 
-import { PORTFOLIO_ITEMS } from './constants';
-import { PortfolioItem } from './types';
+import { PORTFOLIO_ITEMS, GALLERY_IMAGES_SEED } from './constants';
+import { PortfolioItem, GalleryItem } from './types';
 
 function App() {
-  // Inicializa o estado com dados do localStorage ou usa os padrões do constants.ts
+  // Inicializa o estado do portfólio
   const [items, setItems] = useState<PortfolioItem[]>(() => {
     try {
       const saved = localStorage.getItem('portfolio_items');
@@ -18,6 +19,24 @@ function App() {
     } catch (e) {
       console.error("Erro ao carregar itens do portfólio:", e);
       return PORTFOLIO_ITEMS;
+    }
+  });
+
+  // Inicializa o estado da Galeria
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>(() => {
+    try {
+      const saved = localStorage.getItem('gallery_items');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+      // Se não tiver salvo, cria a partir da lista seed (convertendo string para objeto)
+      return GALLERY_IMAGES_SEED.map((url, index) => ({
+        id: `seed-${index}-${Date.now()}`,
+        url: url
+      }));
+    } catch (e) {
+      console.error("Erro ao carregar itens da galeria:", e);
+      return [];
     }
   });
 
@@ -37,6 +56,7 @@ function App() {
     window.scrollTo(0, 0);
   }, [currentView]);
 
+  // Handlers para o Portfólio (Home)
   const handleUpdateItem = (id: number, newUrl: string, newTitle: string) => {
     const newItems = items.map((item) =>
       item.id === id ? { ...item, imageUrl: newUrl, title: newTitle } : item
@@ -45,6 +65,34 @@ function App() {
     localStorage.setItem('portfolio_items', JSON.stringify(newItems));
   };
 
+  // Handlers para a Galeria
+  const handleAddGalleryItem = (url: string) => {
+    const newItem: GalleryItem = {
+      id: `img-${Date.now()}`,
+      url: url
+    };
+    const newGallery = [newItem, ...galleryItems]; // Adiciona no começo
+    setGalleryItems(newGallery);
+    localStorage.setItem('gallery_items', JSON.stringify(newGallery));
+  };
+
+  const handleUpdateGalleryItem = (id: string, newUrl: string) => {
+    const newGallery = galleryItems.map(item => 
+      item.id === id ? { ...item, url: newUrl } : item
+    );
+    setGalleryItems(newGallery);
+    localStorage.setItem('gallery_items', JSON.stringify(newGallery));
+  };
+
+  const handleDeleteGalleryItem = (id: string) => {
+    if (window.confirm("Tem certeza que deseja excluir esta foto da galeria?")) {
+      const newGallery = galleryItems.filter(item => item.id !== id);
+      setGalleryItems(newGallery);
+      localStorage.setItem('gallery_items', JSON.stringify(newGallery));
+    }
+  };
+
+  // Handler para o Logo
   const handleUpdateLogo = (newUrl: string) => {
     const url = newUrl.trim();
     if (url) {
@@ -83,7 +131,13 @@ function App() {
         )}
 
         {currentView === 'gallery' && (
-          <TechGallery />
+          <TechGallery 
+            items={galleryItems}
+            isAdmin={isAdmin}
+            onAdd={handleAddGalleryItem}
+            onUpdate={handleUpdateGalleryItem}
+            onDelete={handleDeleteGalleryItem}
+          />
         )}
 
         {currentView === 'quote' && (
@@ -95,6 +149,8 @@ function App() {
         isAdmin={isAdmin} 
         toggleAdmin={() => setIsAdmin(!isAdmin)} 
       />
+
+      <WhatsAppButton />
     </div>
   );
 }
