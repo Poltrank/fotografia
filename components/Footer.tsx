@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Instagram, Youtube, Lock, Unlock } from 'lucide-react';
+import { Instagram, Youtube, Lock, Unlock, Download, Copy } from 'lucide-react';
 import { COMPANY_INFO } from '../constants';
 import { AdminLoginModal } from './AdminLoginModal';
 
@@ -31,6 +31,39 @@ export const Footer: React.FC<FooterProps> = ({ isAdmin, toggleAdmin }) => {
     } else {
       setShowLoginModal(true); // Abre o modal para entrar
     }
+  };
+
+  const handleExportData = () => {
+    const portfolio = localStorage.getItem('portfolio_items');
+    const gallery = localStorage.getItem('gallery_items');
+    
+    const portfolioData = portfolio ? JSON.parse(portfolio) : 'Use os dados atuais de constants.ts';
+    const galleryData = gallery ? JSON.parse(gallery) : 'Use os dados atuais de constants.ts';
+
+    const exportText = `
+// COPIE E SUBSTITUA O CONTEÚDO DO ARQUIVO constants.ts POR ESTE CÓDIGO:
+
+import { PortfolioItem, ContactInfo } from './types';
+
+export const PORTFOLIO_ITEMS: PortfolioItem[] = ${JSON.stringify(portfolioData, null, 2)};
+
+export const GALLERY_IMAGES_SEED = ${JSON.stringify(galleryData.map((g: any) => g.url), null, 2)};
+
+export const COMPANY_INFO: ContactInfo = {
+  phone: "11 94471-7444",
+  email: "contato@junfotos.com",
+  instagram: "https://www.instagram.com/junfotosoficial",
+  youtube: "https://www.youtube.com/junfotos",
+  threads: "https://www.threads.net/@junfotosoficial?xmt=AQF0-s0j4ePwcNHa3sEVw7rBwbW4HZgLVyR5_gHCgBOnnDI"
+};
+    `;
+
+    navigator.clipboard.writeText(exportText).then(() => {
+      alert('Código copiado para a área de transferência! \n\n1. Abra o arquivo "constants.ts" no seu editor.\n2. Apague tudo e cole o código novo.\n3. Suba para o GitHub.');
+    }).catch(err => {
+      console.error('Erro ao copiar', err);
+      alert('Erro ao copiar. Veja o console.');
+    });
   };
 
   return (
@@ -74,28 +107,40 @@ export const Footer: React.FC<FooterProps> = ({ isAdmin, toggleAdmin }) => {
 
       </div>
 
-      {/* Copyright & Admin Section (Discreet) */}
+      {/* Copyright & Admin Section */}
       <div className="max-w-7xl mx-auto mt-8 pt-6 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
         <p className="text-gray-400 text-xs">
           &copy; {new Date().getFullYear()} Jun Matsuoka & Co - direitos autorais
         </p>
 
-        <button 
-          type="button"
-          onClick={handleAdminClick}
-          className={`p-1.5 rounded transition-colors ${
-            isAdmin 
-              ? "text-red-500 bg-red-50 hover:bg-red-100" 
-              : "text-gray-300 hover:text-gray-500"
-          }`}
-          title={isAdmin ? "Sair do modo edição" : "Área Restrita"}
-        >
-          {isAdmin ? (
-            <Unlock className="w-3 h-3" />
-          ) : (
-            <Lock className="w-3 h-3" />
+        <div className="flex items-center gap-3">
+          {isAdmin && (
+            <button
+              onClick={handleExportData}
+              className="flex items-center gap-2 px-3 py-1 bg-gray-800 text-white text-xs rounded hover:bg-gray-700 transition-colors"
+              title="Gerar código para o GitHub"
+            >
+              <Copy className="w-3 h-3" /> Exportar Dados
+            </button>
           )}
-        </button>
+          
+          <button 
+            type="button"
+            onClick={handleAdminClick}
+            className={`p-1.5 rounded transition-colors ${
+              isAdmin 
+                ? "text-red-500 bg-red-50 hover:bg-red-100" 
+                : "text-gray-300 hover:text-gray-500"
+            }`}
+            title={isAdmin ? "Sair do modo edição" : "Área Restrita"}
+          >
+            {isAdmin ? (
+              <Unlock className="w-3 h-3" />
+            ) : (
+              <Lock className="w-3 h-3" />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Modal de Login */}
