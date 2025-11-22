@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Instagram, Youtube, Lock, Unlock, Download, Copy } from 'lucide-react';
-import { COMPANY_INFO } from '../constants';
+import { COMPANY_INFO, PORTFOLIO_ITEMS, GALLERY_IMAGES_SEED } from '../constants';
 import { AdminLoginModal } from './AdminLoginModal';
 
 interface FooterProps {
@@ -37,8 +37,27 @@ export const Footer: React.FC<FooterProps> = ({ isAdmin, toggleAdmin }) => {
     const portfolio = localStorage.getItem('portfolio_items');
     const gallery = localStorage.getItem('gallery_items');
     
-    const portfolioData = portfolio ? JSON.parse(portfolio) : 'Use os dados atuais de constants.ts';
-    const galleryData = gallery ? JSON.parse(gallery) : 'Use os dados atuais de constants.ts';
+    // Usa os dados do localStorage se existirem, senão usa os defaults importados
+    const portfolioData = portfolio ? JSON.parse(portfolio) : PORTFOLIO_ITEMS;
+    
+    let galleryUrls;
+    if (gallery) {
+      try {
+        const parsedGallery = JSON.parse(gallery);
+        // Verifica se é um array antes de usar map
+        if (Array.isArray(parsedGallery)) {
+          // A galeria no estado tem objetos {id, url}, mas no constants é string[]
+          galleryUrls = parsedGallery.map((g: any) => g.url);
+        } else {
+          galleryUrls = GALLERY_IMAGES_SEED;
+        }
+      } catch (e) {
+        console.error("Erro ao processar galeria para exportação", e);
+        galleryUrls = GALLERY_IMAGES_SEED;
+      }
+    } else {
+      galleryUrls = GALLERY_IMAGES_SEED;
+    }
 
     const exportText = `
 // COPIE E SUBSTITUA O CONTEÚDO DO ARQUIVO constants.ts POR ESTE CÓDIGO:
@@ -47,15 +66,9 @@ import { PortfolioItem, ContactInfo } from './types';
 
 export const PORTFOLIO_ITEMS: PortfolioItem[] = ${JSON.stringify(portfolioData, null, 2)};
 
-export const GALLERY_IMAGES_SEED = ${JSON.stringify(galleryData.map((g: any) => g.url), null, 2)};
+export const GALLERY_IMAGES_SEED = ${JSON.stringify(galleryUrls, null, 2)};
 
-export const COMPANY_INFO: ContactInfo = {
-  phone: "11 94471-7444",
-  email: "contato@junfotos.com",
-  instagram: "https://www.instagram.com/junfotosoficial",
-  youtube: "https://www.youtube.com/junfotos",
-  threads: "https://www.threads.net/@junfotosoficial?xmt=AQF0-s0j4ePwcNHa3sEVw7rBwbW4HZgLVyR5_gHCgBOnnDI"
-};
+export const COMPANY_INFO: ContactInfo = ${JSON.stringify(COMPANY_INFO, null, 2)};
     `;
 
     navigator.clipboard.writeText(exportText).then(() => {
