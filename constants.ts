@@ -63,7 +63,7 @@ export const GALLERY_IMAGES_SEED = [
 export const COMPANY_INFO: ContactInfo = {
   phone: "11 94471-7444",
   email: "contato@junfotos.com",
-  instagram: "Instagram",
-  youtube: "YouTube",
+  instagram: "https://www.instagram.com/junfotosoficial",
+  youtube: "https://www.youtube.com/junfotos",
   threads: "https://www.threads.net/@junfotosoficial?xmt=AQF0-s0j4ePwcNHa3sEVw7rBwbW4HZgLVyR5_gHCgBOnnDI"
 };

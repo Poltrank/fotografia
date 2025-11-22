@@ -57,17 +57,17 @@ export const Footer: React.FC<FooterProps> = ({ isAdmin, toggleAdmin }) => {
         <div className="flex flex-col items-start md:items-start space-y-3">
           <h4 className="text-gray-800 font-medium text-lg">Siga-nos</h4>
           <div className="flex flex-col space-y-2">
-             <a href="#" className="flex items-center gap-2 text-gray-500 hover:text-[#E1306C] transition-colors group">
+             <a href={COMPANY_INFO.instagram} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-500 hover:text-[#E1306C] transition-colors group">
                 <Instagram className="w-5 h-5" />
-                <span className="text-sm">{COMPANY_INFO.instagram}</span>
+                <span className="text-sm">@junfotosoficial</span>
              </a>
-             <a href="#" className="flex items-center gap-2 text-gray-500 hover:text-[#FF0000] transition-colors group">
+             <a href={COMPANY_INFO.youtube} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-500 hover:text-[#FF0000] transition-colors group">
                 <Youtube className="w-5 h-5" />
-                <span className="text-sm">{COMPANY_INFO.youtube}</span>
+                <span className="text-sm">@junfotos</span>
              </a>
              <a href={COMPANY_INFO.threads} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-500 hover:text-black transition-colors group">
                 <ThreadsIcon className="w-5 h-5" />
-                <span className="text-sm">Threads</span>
+                <span className="text-sm">@junfotosoficial</span>
              </a>
           </div>
         </div>
