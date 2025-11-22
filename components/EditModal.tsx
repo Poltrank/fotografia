@@ -99,17 +99,19 @@ export const EditModal: React.FC<EditModalProps> = ({
             </div>
             <div className="mt-2 space-y-1">
               <div className="flex justify-between items-center">
-                <p className="text-xs text-gray-500">Cole o "Link direto" do Postimages.</p>
+                <p className="text-xs text-gray-500">
+                  <span className="font-bold text-red-600">IMPORTANTE:</span> Use o "Link direto" (termina em .jpg ou .png).
+                </p>
                 <a 
                   href="https://postimages.org/" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-xs text-red-600 hover:text-red-700 flex items-center gap-1"
+                  className="text-xs text-red-600 hover:text-red-700 flex items-center gap-1 font-medium"
                 >
                   Abrir Postimages <ExternalLink className="w-3 h-3" />
                 </a>
               </div>
-              {helperText && <p className="text-xs text-red-500 font-medium">{helperText}</p>}
+              {helperText && <p className="text-xs text-gray-500">{helperText}</p>}
             </div>
           </div>
 

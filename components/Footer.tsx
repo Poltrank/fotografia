@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Instagram, Youtube, Lock, Unlock, Download, Copy } from 'lucide-react';
+import { Instagram, Youtube, Lock, Unlock, Copy } from 'lucide-react';
 import { COMPANY_INFO, PORTFOLIO_ITEMS, GALLERY_IMAGES_SEED } from '../constants';
 import { AdminLoginModal } from './AdminLoginModal';
+import { ExportModal } from './ExportModal';
 
 interface FooterProps {
   isAdmin: boolean;
@@ -17,6 +18,8 @@ const ThreadsIcon = ({ className }: { className?: string }) => (
 
 export const Footer: React.FC<FooterProps> = ({ isAdmin, toggleAdmin }) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [exportCode, setExportCode] = useState('');
 
   // Prepara o link do WhatsApp
   const cleanPhone = COMPANY_INFO.phone.replace(/\D/g, '');
@@ -44,39 +47,30 @@ export const Footer: React.FC<FooterProps> = ({ isAdmin, toggleAdmin }) => {
     if (gallery) {
       try {
         const parsedGallery = JSON.parse(gallery);
-        // Verifica se é um array antes de usar map
         if (Array.isArray(parsedGallery)) {
-          // A galeria no estado tem objetos {id, url}, mas no constants é string[]
+          // Extrai apenas as URLs para salvar limpo no constants
           galleryUrls = parsedGallery.map((g: any) => g.url);
         } else {
           galleryUrls = GALLERY_IMAGES_SEED;
         }
       } catch (e) {
-        console.error("Erro ao processar galeria para exportação", e);
         galleryUrls = GALLERY_IMAGES_SEED;
       }
     } else {
       galleryUrls = GALLERY_IMAGES_SEED;
     }
 
-    const exportText = `
-// COPIE E SUBSTITUA O CONTEÚDO DO ARQUIVO constants.ts POR ESTE CÓDIGO:
-
-import { PortfolioItem, ContactInfo } from './types';
+    const code = `import { PortfolioItem, ContactInfo } from './types';
 
 export const PORTFOLIO_ITEMS: PortfolioItem[] = ${JSON.stringify(portfolioData, null, 2)};
 
 export const GALLERY_IMAGES_SEED = ${JSON.stringify(galleryUrls, null, 2)};
 
 export const COMPANY_INFO: ContactInfo = ${JSON.stringify(COMPANY_INFO, null, 2)};
-    `;
+`;
 
-    navigator.clipboard.writeText(exportText).then(() => {
-      alert('Código copiado para a área de transferência! \n\n1. Abra o arquivo "constants.ts" no seu editor.\n2. Apague tudo e cole o código novo.\n3. Suba para o GitHub.');
-    }).catch(err => {
-      console.error('Erro ao copiar', err);
-      alert('Erro ao copiar. Veja o console.');
-    });
+    setExportCode(code);
+    setShowExportModal(true);
   };
 
   return (
@@ -130,10 +124,10 @@ export const COMPANY_INFO: ContactInfo = ${JSON.stringify(COMPANY_INFO, null, 2)
           {isAdmin && (
             <button
               onClick={handleExportData}
-              className="flex items-center gap-2 px-3 py-1 bg-gray-800 text-white text-xs rounded hover:bg-gray-700 transition-colors"
-              title="Gerar código para o GitHub"
+              className="flex items-center gap-2 px-3 py-1 bg-gray-800 text-white text-xs rounded hover:bg-gray-700 transition-colors shadow-sm"
+              title="Gerar código para atualizar no GitHub"
             >
-              <Copy className="w-3 h-3" /> Exportar Dados
+              <Copy className="w-3 h-3" /> Gerar Código para o Site
             </button>
           )}
           
@@ -156,11 +150,17 @@ export const COMPANY_INFO: ContactInfo = ${JSON.stringify(COMPANY_INFO, null, 2)
         </div>
       </div>
 
-      {/* Modal de Login */}
+      {/* Modais */}
       <AdminLoginModal 
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
         onLogin={toggleAdmin}
+      />
+      
+      <ExportModal 
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        code={exportCode}
       />
     </footer>
   );
